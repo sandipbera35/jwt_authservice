@@ -19,7 +19,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQzNTU5LCJpYXQiOjE3MjE3Mzk5NTl9.pAQ_dM2E44zNPIvvjafK-ab_TbBWGlcB6f9Mn0kIeWo",
+										"value": "{{TOKEN}}",
 										"type": "text"
 									}
 								],
@@ -57,7 +57,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ3NjMxLCJpYXQiOjE3MjE3NDQwMzF9.FKPIAO9HwNm7swB_ax2Yujm05N-kFcq0iObQzBHmod4",
+										"value": "{{TOKEN}}",
 										"type": "text",
 										"disabled": true
 									}
@@ -73,7 +73,7 @@
 									]
 								},
 								"url": {
-									"raw": "{{baseurl}}/get/profile/image?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ4MjQzLCJpYXQiOjE3MjE3NDQ2NDN9.meLm-BdSyvjTLDngi6fzGNNsfhh6wQf50lQFUg1G2Pk",
+									"raw": "{{baseurl}}/get/profile/image?token={{TOKEN}}",
 									"host": [
 										"{{baseurl}}"
 									],
@@ -85,7 +85,7 @@
 									"query": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ4MjQzLCJpYXQiOjE3MjE3NDQ2NDN9.meLm-BdSyvjTLDngi6fzGNNsfhh6wQf50lQFUg1G2Pk"
+											"value": "{{TOKEN}}"
 										}
 									]
 								}
@@ -102,7 +102,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ3NjMxLCJpYXQiOjE3MjE3NDQwMzF9.FKPIAO9HwNm7swB_ax2Yujm05N-kFcq0iObQzBHmod4",
+										"value": "{{TOKEN}}",
 										"type": "text",
 										"disabled": true
 									}
@@ -150,7 +150,13 @@
 					"name": "Register New User",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"first_name\": \"Mr\",\n  \"last_name\": \"Beast\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1993-02-26T00:00:00Z\",\n  \"user_name\": \"mrbeast1\",\n  \"user_password\": \"1213123\",\n  \"mobile_no\": \"8158802392\",\n  \"email_id\": \"beast@outlook.com\"\n}",
@@ -161,13 +167,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseurl}}/api/v1/register",
+							"raw": "{{baseurl}}/register",
 							"host": [
 								"{{baseurl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"register"
 							]
 						}
@@ -176,6 +180,20 @@
 				},
 				{
 					"name": "LogIn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"pm.collectionVariables.set('TOKEN', response.token);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -210,7 +228,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ4OTczLCJpYXQiOjE3MjE3NDUzNzN9.cLstHZ_ZLfSIfYpSZEfQ4FXEz_uZVgeIJMpXqZtV-kk"
+								"value": "{{TOKEN}}"
 							}
 						],
 						"body": {
@@ -223,13 +241,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseurl}}/api/v1/profile",
+							"raw": "{{baseurl}}/profile",
 							"host": [
 								"{{baseurl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"profile"
 							]
 						}
@@ -243,7 +259,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzUxMzg3LCJpYXQiOjE3MjE3NDc3ODd9.7pMc2OYaphG64q38hVCK3sr3cbwpD7Ug3GZt0kINnes",
+								"value": "{{TOKEN}}",
 								"type": "text"
 							}
 						],
@@ -257,9 +273,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseurl}}s/update/profile",
+							"raw": "{{baseurl}}/update/profile",
 							"host": [
-								"{{baseurl}}s"
+								"{{baseurl}}"
 							],
 							"path": [
 								"update",
