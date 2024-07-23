@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"strings"
+
 	"github.com/gofiber/fiber"
 	"github.com/google/uuid"
 	"github.com/sandipbera35/jwt_authservice/database"
@@ -31,6 +33,14 @@ func Register(c *fiber.Ctx) error {
 
 	user.ID = uuid.New()
 
+	//check password is vlid or not
+	if len(userUiModel.UserPassword) < 6 || strings.TrimSpace(userUiModel.UserPassword) == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  fiber.StatusBadRequest,
+			"message": "Password must be at least 6 characters",
+		})
+	}
+
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userUiModel.UserPassword), bcrypt.DefaultCost)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -51,9 +61,4 @@ func Register(c *fiber.Ctx) error {
 		"message": "User registered successfully",
 		"data":    user,
 	})
-}
-func HashPassword(password string) string {
-	// For simplicity, just returning the same password in this example
-	// In production, you should use a proper hashing algorithm like bcrypt
-	return password
 }
