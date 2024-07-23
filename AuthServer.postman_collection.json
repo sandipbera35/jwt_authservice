@@ -1,0 +1,309 @@
+{
+	"info": {
+		"_postman_id": "0d424254-4bee-4950-8c58-272a3fd08294",
+		"name": "AuthServer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31158988"
+	},
+	"item": [
+		{
+			"name": "UserControll",
+			"item": [
+				{
+					"name": "Image Controller",
+					"item": [
+						{
+							"name": "Upload Profile Picture",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQzNTU5LCJpYXQiOjE3MjE3Mzk5NTl9.pAQ_dM2E44zNPIvvjafK-ab_TbBWGlcB6f9Mn0kIeWo",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "profile_pic",
+											"type": "file",
+											"src": "/Users/sandipbera/Downloads/ChildHoood.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseurl}}/upload/profile/image",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"upload",
+										"profile",
+										"image"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Profile Pic",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ3NjMxLCJpYXQiOjE3MjE3NDQwMzF9.FKPIAO9HwNm7swB_ax2Yujm05N-kFcq0iObQzBHmod4",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "profile_pic",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseurl}}/get/profile/image?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ4MjQzLCJpYXQiOjE3MjE3NDQ2NDN9.meLm-BdSyvjTLDngi6fzGNNsfhh6wQf50lQFUg1G2Pk",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"get",
+										"profile",
+										"image"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ4MjQzLCJpYXQiOjE3MjE3NDQ2NDN9.meLm-BdSyvjTLDngi6fzGNNsfhh6wQf50lQFUg1G2Pk"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Profile Pic By Id (Public)",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ3NjMxLCJpYXQiOjE3MjE3NDQwMzF9.FKPIAO9HwNm7swB_ax2Yujm05N-kFcq0iObQzBHmod4",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "profile_pic",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseurl}}/get/profile/image/by/id?file_id=0d6095cc-8b72-41d6-ac74-6a8da2674201",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"get",
+										"profile",
+										"image",
+										"by",
+										"id"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ4MjQzLCJpYXQiOjE3MjE3NDQ2NDN9.meLm-BdSyvjTLDngi6fzGNNsfhh6wQf50lQFUg1G2Pk",
+											"disabled": true
+										},
+										{
+											"key": "file_id",
+											"value": "0d6095cc-8b72-41d6-ac74-6a8da2674201"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Register New User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"Mr\",\n  \"last_name\": \"Beast\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1993-02-26T00:00:00Z\",\n  \"user_name\": \"mrbeast1\",\n  \"user_password\": \"1213123\",\n  \"mobile_no\": \"8158802392\",\n  \"email_id\": \"beast@outlook.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/register",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LogIn",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"password\": \"1221\",\n  \"email_id\": \"sandipbera35@outlook.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/login",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProfile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ4OTczLCJpYXQiOjE3MjE3NDUzNzN9.cLstHZ_ZLfSIfYpSZEfQ4FXEz_uZVgeIJMpXqZtV-kk"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"password\": \"1221\",\n  \"email_id\": \"sandipbera35@outlook.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/v1/profile",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upldate Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzUxMzg3LCJpYXQiOjE3MjE3NDc3ODd9.7pMc2OYaphG64q38hVCK3sr3cbwpD7Ug3GZt0kINnes",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"Sandip\",\n  \"last_name\": \"Bera\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1993-02-26T00:00:00Z\",\n  \"profile_pic_status\": true // this will update whether profile pic will be publicly available or not \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}s/update/profile",
+							"host": [
+								"{{baseurl}}s"
+							],
+							"path": [
+								"update",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "TOKEN",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNjczMjk5LCJpYXQiOjE3MjE2Njk2OTl9.qx-8siouY4z-umP6g3Vre-OpCDPvSv_7ZJG0XJOMgwM",
+			"type": "string"
+		},
+		{
+			"key": "baseurl",
+			"value": "localhost:8091/api/v1",
+			"type": "string"
+		}
+	]
+}

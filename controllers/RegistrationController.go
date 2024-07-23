@@ -33,6 +33,14 @@ func Register(c *fiber.Ctx) error {
 
 	user.ID = uuid.New()
 
+	chkQ := database.Connect.Model(models.User{}).Where("user_name = ?", user.UserName).Or("email_id = ?", user.EmailID).Or("mobile_no = ?", user.MobileNo).Find(&user)
+	if chkQ.RowsAffected > 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+
+			"status":  fiber.StatusBadRequest,
+			"message": "User already exists",
+		})
+	}
 	//check password is vlid or not
 	if len(userUiModel.UserPassword) < 6 || strings.TrimSpace(userUiModel.UserPassword) == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

@@ -36,8 +36,9 @@ func Login(c *fiber.Ctx) error {
 			"error": "Invalid credentials",
 		})
 	}
-
-	token, err := GenerateJWT(user)
+	ExpiresAt := jwt.NewNumericDate(time.Now().Add(time.Hour * 1))
+	IssuedAt := jwt.NewNumericDate(time.Now())
+	token, err := GenerateJWT(user, ExpiresAt, IssuedAt)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Could not login",
@@ -45,7 +46,10 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"token": token,
+		"user_id":    user.ID,
+		"expires_at": ExpiresAt,
+		"issued_at":  IssuedAt,
+		"token":      token,
 	})
 }
 
@@ -58,6 +62,19 @@ func GetProfile(c *fiber.Ctx) error {
 		})
 	}
 	return c.Status(fiber.StatusOK).JSON(claims)
+}
+
+func GetUserFromToken(token string) (models.User, error) {
+	claims, err := VerifyJWT(token)
+	if err != nil {
+		return models.User{}, err
+	}
+	var user models.User
+	if err := database.Connect.Where("id = ?", claims.UserId).First(&user).Error; err != nil {
+		return models.User{}, err
+	}
+	return user, nil
+
 }
 
 var jwtSecret = []byte("supersecretkey")
@@ -74,7 +91,7 @@ type CustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-func GenerateJWT(userDetails models.User) (string, error) {
+func GenerateJWT(userDetails models.User, ExpiresAt *jwt.NumericDate, IssuedAt *jwt.NumericDate) (string, error) {
 	claims := CustomClaims{
 		UserId:    userDetails.ID.String(),
 		FirstName: userDetails.FirstName,
@@ -85,8 +102,8 @@ func GenerateJWT(userDetails models.User) (string, error) {
 		MobileNo:  userDetails.MobileNo,
 		EmailID:   userDetails.EmailID,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 1)),
-			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			ExpiresAt: ExpiresAt,
+			IssuedAt:  IssuedAt,
 		},
 	}
 
