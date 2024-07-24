@@ -49,9 +49,6 @@
 						},
 						{
 							"name": "Get Profile Pic",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
 							"request": {
 								"method": "GET",
 								"header": [
@@ -62,16 +59,6 @@
 										"disabled": true
 									}
 								],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "profile_pic",
-											"type": "file",
-											"src": []
-										}
-									]
-								},
 								"url": {
 									"raw": "{{baseurl}}/get/profile/image?token={{TOKEN}}",
 									"host": [
@@ -118,7 +105,7 @@
 									]
 								},
 								"url": {
-									"raw": "{{baseurl}}/get/profile/image/by/id?file_id=0d6095cc-8b72-41d6-ac74-6a8da2674201",
+									"raw": "{{baseurl}}/get/profile/image/by/id?file_id=0fa38c8f-f061-4cd7-9fc3-3c3f936afa4e",
 									"host": [
 										"{{baseurl}}"
 									],
@@ -137,7 +124,7 @@
 										},
 										{
 											"key": "file_id",
-											"value": "0d6095cc-8b72-41d6-ac74-6a8da2674201"
+											"value": "0fa38c8f-f061-4cd7-9fc3-3c3f936afa4e"
 										}
 									]
 								}
