@@ -1,6 +1,7 @@
 # jwt_authservice
 This Is an Implementation Of JWT User Authentication Service In Golang Fiber Framework with postgresql
-
+# Install Docker 
+visit https://docs.docker.com/engine/install/
 # To Run Minio Object Storage Server Run Code Below 
 Docker Should be installed before running minio 
 
