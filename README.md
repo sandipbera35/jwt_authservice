@@ -17,5 +17,5 @@ visit https://www.postgresql.org/download/
 
 visit https://www.postman.com/downloads/
 
-# Import The Postman Collection File From postman folder of the project 
+Import The Postman Collection File From postman folder of the project 
 
