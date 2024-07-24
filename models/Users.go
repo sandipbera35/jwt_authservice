@@ -17,12 +17,12 @@ type User struct {
 	UserPassword string    `gorm:"type:varchar(255)" json:"-"`
 	MobileNo     string    `json:"mobile_no"`
 	EmailID      string    `gorm:"unique" json:"email_id"`
-	Files        []File    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"` // One-to-many relationship with Files
+	Files        []File    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:UserID" ` // One-to-many relationship with Files
 }
 
 // File represents the file entity with additional information
 type File struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey"`
+	ID        uuid.UUID `gorm:"type:uuid;primaryKey;not null" json:"id"`
 	Type      string    `gorm:"type:varchar(100)" validate:"oneof='profile' 'cover' 'document' "`
 	FileName  string    `gorm:"type:text"`
 	UserID    uuid.UUID `gorm:"type:uuid;index"`   // Foreign key to the User table
@@ -31,7 +31,7 @@ type File struct {
 	CreatedAt time.Time `gorm:"autoCreateTime"`    // Creation timestamp
 	UpdatedAt time.Time `gorm:"autoUpdateTime"`    // Update timestamp
 	Path      string    `gorm:"size:500;not null"` // File path or location
-	IsPublic  bool      `gorm:"default:false"`     // Public or private flag
+	IsPublic  bool      `gorm:"default:true"`      // Public or private flag
 }
 
 type UserUiModel struct {

@@ -5,7 +5,9 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/gofiber/fiber"
 	"github.com/google/uuid"
@@ -13,40 +15,44 @@ import (
 	"github.com/sandipbera35/jwt_authservice/models"
 )
 
-func AddUploadProfilePic(c *fiber.Ctx) error {
+func AddUploadProfilePic(c *fiber.Ctx) {
 	profile, ErrC := GetUserFromToken(c.Get("Authorization"))
 
 	if ErrC != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.ErrUnauthorized.Code,
 			"message": "Unauthorized",
 			"data":    nil,
 		})
+		return
 	}
 	fh, e := c.FormFile("profile_pic")
 
 	if e != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": "Failed to upload profile picture",
 			"data":    nil,
 		})
+		return
 	}
 
 	f, errF := fh.Open()
 	if errF != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": "Failed to upload profile picture",
 			"data":    nil,
 		})
+		return
 	}
 
 	filePath := os.Getenv("STORE_PATH") + fh.Filename
 	fc, errfc := os.Create(filePath)
 	_, _ = io.Copy(fc, f)
 	if errfc != nil {
-		return fmt.Errorf("could not save file data: %v", errfc)
+		c.JSON("could not save file data")
+		return
 	}
 
 	defer func() {
@@ -56,25 +62,27 @@ func AddUploadProfilePic(c *fiber.Ctx) error {
 	}()
 
 	if fh.Size < 200 {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": "File size must be greater than 200 bytes",
 			"data":    nil,
 		})
+		return
 	}
 
 	mimeType := fh.Header.Get("Content-Type")
 	if !strings.HasPrefix(mimeType, "image/") {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": "File must be an image",
 			"data":    nil,
 		})
+		return
 	}
 
 	var fileQ models.File
 
-	fQ := database.Connect.Where("user_id = ?", profile.ID).First(&fileQ)
+	fQ := database.Connect.Where("user_id = ?", profile.ID).Where("type = ?", "profile").Find(&fileQ)
 
 	store := models.Store{
 		EndPoint:   "localhost:9000",
@@ -84,88 +92,111 @@ func AddUploadProfilePic(c *fiber.Ctx) error {
 	}
 	storepath := ""
 	var fileguid uuid.UUID
+	var file models.File
+
 	if fQ.RowsAffected > 0 {
-		storepath = "profile" + "/" + profile.ID.String() + "/" + fileQ.ID.String() + "/" + fh.Filename
 		fileguid = fileQ.ID
+		storepath = "profile" + "/" + profile.ID.String() + "/" + fileQ.ID.String() + "/" + fileguid.String() + filepath.Ext(fh.Filename)
 
 	} else {
 
 		fileguid = uuid.New()
-		storepath = "profile" + "/" + profile.ID.String() + "/" + fileguid.String() + "/" + fh.Filename
+		file.ID = fileguid
+		file.CreatedAt = time.Now().UTC()
+		storepath = "profile" + "/" + profile.ID.String() + "/" + fileguid.String() + "/" + fileguid.String() + filepath.Ext(fh.Filename)
 
 	}
 
-	file := new(models.File)
-	file.ID = fileguid
 	file.Type = "profile"
+	file.UpdatedAt = time.Now().UTC()
 	file.FileName = fh.Filename
 	file.Size = fh.Size
 	file.MimeType = mimeType
 	file.UserID = profile.ID
 	file.Path = storepath
 
+	file.IsPublic = fileQ.IsPublic
+
 	errMFU := store.Upload(os.Getenv("MINIO_BUCKET"), storepath, filePath, mimeType)
 
 	if errMFU {
 		fmt.Println("Error in File server")
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": "Failed to upload profile picture",
 			"data":    nil,
 		})
+		return
+	}
+	if fQ.RowsAffected > 0 {
+		if err := database.Connect.Where("user_id = ?", profile.ID).Updates(&file).Error; err != nil {
+			c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":  fiber.StatusInternalServerError,
+				"message": "Failed to upload profile picture",
+				"data":    nil,
+			})
+			return
+		}
+	} else {
+		if err := database.Connect.Create(&file).Error; err != nil {
+			c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"status":  fiber.StatusInternalServerError,
+				"message": "Failed to upload profile picture",
+				"data":    nil,
+			})
+			return
+		}
+
 	}
 
-	if err := database.Connect.Create(&file).Error; err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"status":  fiber.StatusInternalServerError,
-			"message": "Failed to upload profile picture",
-			"data":    nil,
-		})
-	}
+	database.Connect.Model(models.File{}).Where("id = ?", file.ID).Where("type = ?", "profile").Find(&file)
+	file.ID = fileguid
+	// profile.Files = append(profile.Files, file)
 
-	profile.Files = append(profile.Files, *file)
-
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+	c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"status":  fiber.StatusOK,
 		"message": "Profile picture uploaded successfully",
-		"data":    profile,
+		"data":    file,
 	})
 }
 
-func GetProfilePic(c *fiber.Ctx) error {
+func GetProfilePic(c *fiber.Ctx) {
 
 	token := c.Get("Authorization")
 
 	if token == "" {
 		token = c.Query("token")
 		if token == "" {
-			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 				"status":  fiber.ErrUnauthorized.Code,
 				"message": "Unauthorized",
 				"data":    nil,
 			})
+			return
 		}
 	}
 
 	profile, ErrC := GetUserFromToken(token)
 	if ErrC != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.ErrUnauthorized.Code,
 			"message": "Unauthorized",
 			"data":    nil,
 		})
+		return
 	}
 
 	var file models.File
 
-	fileQ := database.Connect.Where("user_id = ?", profile.ID).Where("type = ?", "profile").Preload("User").First(&file)
+	fileQ := database.Connect.Where("user_id = ?", profile.ID).Where("type = ?", "profile").First(&file)
 
 	if fileQ.RowsAffected == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  fiber.StatusNotFound,
 			"message": "Profile picture not found",
 			"data":    nil,
 		})
+		return
 	}
 
 	store := models.Store{
@@ -179,18 +210,20 @@ func GetProfilePic(c *fiber.Ctx) error {
 
 	if errMFS {
 		fmt.Println("Error in File server")
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": "Failed to get profile picture",
 			"data":    nil,
 		})
+		return
 	}
 
 	// stream file with fiber
 	objectInfo, err := obj.Stat()
 	if err != nil {
 		log.Println("Error getting object info:", err)
-		return c.Status(fiber.StatusInternalServerError).JSON("Error getting object info")
+		c.Status(fiber.StatusInternalServerError).JSON("Error getting object info")
+		return
 	}
 
 	// Set headers for the response
@@ -201,37 +234,38 @@ func GetProfilePic(c *fiber.Ctx) error {
 	// Stream the object to the client
 	c.SendStream(obj, int(file.Size))
 
-	return nil
-
 }
 
-func UpdateProfileDetails(c *fiber.Ctx) error {
+func UpdateProfileDetails(c *fiber.Ctx) {
 
 	token := c.Get("Authorization")
 	// fmt.Printf("token: %v\n", token)
 	claims, err := VerifyJWT(token)
 	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Unauthorized",
 		})
+		return
 	}
 	var profile models.User
 	// fmt.Printf("profile: %v\n", claims)
 	findQ := database.Connect.Where("id = ?", claims.UserId).First(&profile)
 
 	if findQ.Error != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  fiber.StatusNotFound,
 			"message": "Profile not found",
 			"data":    nil,
 		})
+		return
 	}
 
 	var usermodel models.UserUiModel
 	if err := c.BodyParser(&usermodel); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse JSON",
 		})
+		return
 	}
 
 	fmt.Printf("usermodel: %v\n", usermodel)
@@ -244,21 +278,23 @@ func UpdateProfileDetails(c *fiber.Ctx) error {
 	saveQ := database.Connect.Where("id = ?", claims.UserId).Save(&profile)
 
 	if saveQ.Error != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": "Failed to update profile details",
 			"data":    nil,
 		})
+		return
 	}
 
 	var file models.File
 	fileQ := database.Connect.Where("user_id = ?", claims.UserId).Where("type = ?", "profile").First(&file)
 	if fileQ.RowsAffected == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  fiber.StatusNotFound,
 			"message": "Profile picture not found",
 			"data":    nil,
 		})
+		return
 	}
 
 	var ispub bool = false
@@ -271,46 +307,50 @@ func UpdateProfileDetails(c *fiber.Ctx) error {
 	fileSaveQ := database.Connect.Model(models.File{}).Where("id = ?", file.ID).UpdateColumn("is_public", ispub)
 
 	if fileSaveQ.Error != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": "Failed to update profile details",
 			"data":    nil,
 		})
+		return
 	}
 
 	fileQQ := database.Connect.Where("user_id = ?", claims.UserId).Where("type = ?", "profile").First(&file)
 	if fileQQ.RowsAffected == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": "Internal server errors",
 			"data":    nil,
 		})
+		return
 	}
 	profile.Files = append(profile.Files, file)
-	return c.Status(fiber.StatusOK).JSON(profile)
+	c.Status(fiber.StatusOK).JSON(profile)
 }
-func GetPublicProfilePicById(c *fiber.Ctx) error {
+func GetPublicProfilePicById(c *fiber.Ctx) {
 
 	fileid := c.Query("file_id")
 
 	if fileid == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  fiber.StatusBadRequest,
 			"message": "file_id is required",
 			"data":    nil,
 		})
+		return
 	}
 
 	var file models.File
 
-	fileQ := database.Connect.Where("id = ?", fileid).Where("type = ?", "profile").Where("is_public = ?", true).Preload("User").Preload("User").First(&file)
+	fileQ := database.Connect.Where("id = ?", fileid).Where("type = ?", "profile").Where("is_public = ?", true).Find(&file)
 
 	if fileQ.RowsAffected == 0 {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  fiber.StatusNotFound,
 			"message": "Profile picture not found",
 			"data":    nil,
 		})
+		return
 	}
 
 	store := models.Store{
@@ -324,18 +364,20 @@ func GetPublicProfilePicById(c *fiber.Ctx) error {
 
 	if errMFS {
 		fmt.Println("Error in File server")
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": "Failed to get profile picture",
 			"data":    nil,
 		})
+		return
 	}
 
 	// stream file with fiber
 	objectInfo, err := obj.Stat()
 	if err != nil {
 		log.Println("Error getting object info:", err)
-		return c.Status(fiber.StatusInternalServerError).JSON("Error getting object info")
+		c.Status(fiber.StatusInternalServerError).JSON("Error getting object info")
+		return
 	}
 
 	// Set headers for the response
@@ -345,7 +387,5 @@ func GetPublicProfilePicById(c *fiber.Ctx) error {
 
 	// Stream the object to the client
 	c.SendStream(obj, int(file.Size))
-
-	return nil
 
 }

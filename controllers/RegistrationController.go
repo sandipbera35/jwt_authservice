@@ -13,13 +13,14 @@ import (
 // var jwtSecret = []byte("supersecretkey")
 
 // Register endpoint
-func Register(c *fiber.Ctx) error {
+func Register(c *fiber.Ctx) {
 	userUiModel := new(models.UserUiModel)
 
 	if err := c.BodyParser(userUiModel); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse JSON",
 		})
+		return
 	}
 
 	user := new(models.User)
@@ -35,36 +36,40 @@ func Register(c *fiber.Ctx) error {
 
 	chkQ := database.Connect.Model(models.User{}).Where("user_name = ?", user.UserName).Or("email_id = ?", user.EmailID).Or("mobile_no = ?", user.MobileNo).Find(&user)
 	if chkQ.RowsAffected > 0 {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 
 			"status":  fiber.StatusBadRequest,
-			"message": "User already exists",
+			"message": "User already exists with this email or mobile number",
 		})
+		return
 	}
 	//check password is vlid or not
 	if len(userUiModel.UserPassword) < 6 || strings.TrimSpace(userUiModel.UserPassword) == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  fiber.StatusBadRequest,
 			"message": "Password must be at least 6 characters",
 		})
+		return
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userUiModel.UserPassword), bcrypt.DefaultCost)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to hash password",
 		})
+		return
 	}
 	user.UserPassword = string(hashedPassword)
 
 	if err := database.Connect.Create(&user).Error; err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Could not register user",
 		})
+		return
 	}
 
 	// c.Status(fiber.StatusOK)
-	return c.JSON(fiber.Map{
+	c.JSON(fiber.Map{
 		"status":  fiber.StatusOK,
 		"message": "User registered successfully",
 		"data":    user,
