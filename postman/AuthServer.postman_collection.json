@@ -146,7 +146,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"Mr\",\n  \"last_name\": \"Beast\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1993-02-26T00:00:00Z\",\n  \"user_name\": \"mrbeast1\",\n  \"user_password\": \"1213123\",\n  \"mobile_no\": \"8158802392\",\n  \"email_id\": \"beast@outlook.com\"\n}",
+							"raw": "{\n  \"first_name\": \"Mr\",\n  \"last_name\": \"Beast\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1999-02-26T00:00:00Z\",\n  \"user_name\": \"mrbeast1\",\n  \"user_password\": \"1213123\",\n  \"mobile_no\": \"8158802392\",\n  \"email_id\": \"beast@outlook.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -166,7 +166,7 @@
 					"response": []
 				},
 				{
-					"name": "LogIn",
+					"name": "LogIn(GetToken)",
 					"event": [
 						{
 							"listen": "test",
@@ -252,7 +252,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"Sandip\",\n  \"last_name\": \"Bera\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1993-02-26T00:00:00Z\",\n  \"profile_pic_status\": true // this will update whether profile pic will be publicly available or not \n}",
+							"raw": "{\n  \"first_name\": \"Sandip\",\n  \"last_name\": \"Bera\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1997-02-26T00:00:00Z\",\n  \"profile_pic_status\": true // this will update whether profile pic will be publicly available or not \n}",
 							"options": {
 								"raw": {
 									"language": "json"
