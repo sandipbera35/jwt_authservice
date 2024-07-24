@@ -101,7 +101,6 @@ func AddUploadProfilePic(c *fiber.Ctx) error {
 	file.FileName = fh.Filename
 	file.Size = fh.Size
 	file.MimeType = mimeType
-	file.FileGUID = fileguid.String()
 	file.UserID = profile.ID
 	file.Path = storepath
 

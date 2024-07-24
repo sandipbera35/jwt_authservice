@@ -25,15 +25,13 @@ type File struct {
 	ID        uuid.UUID `gorm:"type:uuid;primaryKey"`
 	Type      string    `gorm:"type:varchar(100)" validate:"oneof='profile' 'cover' 'document' "`
 	FileName  string    `gorm:"type:text"`
-	FileGUID  string    `gorm:"type:varchar(255);uniqueIndex"`
 	UserID    uuid.UUID `gorm:"type:uuid;index"`   // Foreign key to the User table
 	Size      int64     `gorm:"not null"`          // File size in bytes
 	MimeType  string    `gorm:"size:100"`          // MIME type of the file
 	CreatedAt time.Time `gorm:"autoCreateTime"`    // Creation timestamp
 	UpdatedAt time.Time `gorm:"autoUpdateTime"`    // Update timestamp
 	Path      string    `gorm:"size:500;not null"` // File path or location
-	IsPublic  bool      `gorm:"default:false"`     // Public or private flag                              // Foreign key to the User table
-	// User      User      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"` // Establishes relationship
+	IsPublic  bool      `gorm:"default:false"`     // Public or private flag
 }
 
 type UserUiModel struct {
@@ -45,5 +43,5 @@ type UserUiModel struct {
 	UserPassword     string    `json:"user_password"`
 	MobileNo         string    `json:"mobile_no"`
 	EmailID          string    `json:"email_id"`
-	ProfilePicStatus bool      `json:"profile_pic_status"` // IsPublic  bool      `gorm:"default:false"`
+	ProfilePicStatus bool      `json:"profile_pic_status"` // this will update whether profile pic will be publicly available or not
 }
