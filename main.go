@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	database.DbConnect()
+	database.ConnectDatabase()
 }
 func main() {
 	println("Server strated .....!")

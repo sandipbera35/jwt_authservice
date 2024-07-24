@@ -16,7 +16,7 @@ import (
 
 var Connect *gorm.DB
 
-func DbConnect() error {
+func ConnectDatabase() error {
 	errr := godotenv.Load(".env")
 	if errr != nil {
 		log.Fatalf("Error loading .env file")
@@ -56,14 +56,14 @@ func DbConnect() error {
 	}
 
 	if os.Getenv("MIGRATION") == "true" {
-		Migrate(models.User{}, models.File{})
+		AutoMigrateFunc(models.User{}, models.File{})
 	}
 	log.Println("Database connection was successful!!")
 	return nil
 
 }
 
-func Migrate(User models.User, File models.File) {
+func AutoMigrateFunc(User models.User, File models.File) {
 	Connect.Exec("ALTER DATABASE " + os.Getenv("NAME") + " SET timezone = 'UTC'")
 	Connect.AutoMigrate(&User)
 	Connect.AutoMigrate(&File)
