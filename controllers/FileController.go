@@ -333,6 +333,19 @@ func GetProfilePic(c *fiber.Ctx) {
 		return
 	}
 
+	if profile.ProfileImage == nil {
+
+		f, _ := os.ReadFile("./defaultprofile.png")
+
+		c.Set("Content-Disposition", "inline; filename=defaultprofile.png")
+		c.Set("Content-Type", "image/png")
+		c.Set("Content-Length", fmt.Sprintf("%v", len(f)))
+
+		c.Status(fiber.StatusOK).SendFile("./defaultprofile.png", true)
+		return
+
+	}
+
 	var file models.ProfileImage
 
 	fileQ := database.Connect.Where("user_id = ?", profile.ID).First(&file)
@@ -408,6 +421,19 @@ func GetCoverPic(c *fiber.Ctx) {
 		return
 	}
 
+	if profile.CoverImage == nil {
+
+		f, _ := os.ReadFile("./default_cover.jpg")
+
+		c.Set("Content-Disposition", "inline; filename=default_cover.jpg")
+		c.Set("Content-Type", "image/jpeg")
+		c.Set("Content-Length", fmt.Sprintf("%v", len(f)))
+
+		c.Status(fiber.StatusOK).SendFile("./default_cover.jpg", true)
+		return
+
+	}
+
 	var file models.CoverImage
 
 	fileQ := database.Connect.Where("user_id = ?", profile.ID).First(&file)
@@ -415,7 +441,7 @@ func GetCoverPic(c *fiber.Ctx) {
 	if fileQ.RowsAffected == 0 {
 		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  fiber.StatusNotFound,
-			"message": "Profile picture not found",
+			"message": "Cover picture not found",
 			"data":    nil,
 		})
 		return
@@ -434,7 +460,7 @@ func GetCoverPic(c *fiber.Ctx) {
 		fmt.Println("Error in File server")
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
-			"message": "Failed to get profile picture",
+			"message": "Failed to get cover picture",
 			"data":    nil,
 		})
 		return
@@ -540,7 +566,7 @@ func GetPublicCoverPicById(c *fiber.Ctx) {
 	if fileQ.RowsAffected == 0 {
 		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  fiber.StatusNotFound,
-			"message": "Profile picture not found",
+			"message": "Cover picture not found",
 			"data":    nil,
 		})
 		return
@@ -559,7 +585,7 @@ func GetPublicCoverPicById(c *fiber.Ctx) {
 		fmt.Println("Error in File server")
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
-			"message": "Failed to get profile picture",
+			"message": "Failed to get cover picture",
 			"data":    nil,
 		})
 		return
