@@ -582,3 +582,133 @@ func GetPublicCoverPicById(c *fiber.Ctx) {
 	c.SendStream(obj, int(file.Size))
 
 }
+
+func DeleteProfilePic(c *fiber.Ctx) {
+
+	// fileid := c.Query("file_id")
+	// if fileid == "" {
+	// 	c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+	// 		"status":  fiber.StatusBadRequest,
+	// 		"message": "file_id is required",
+	// 		"data":    nil,
+	// 	})
+	// 	return
+	// }
+	profile, errC := GetUserFromToken(c.Get("Authorization"))
+
+	if errC != nil {
+		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"status":  fiber.ErrUnauthorized.Code,
+			"message": "Unauthorized",
+			"data":    nil,
+		})
+		return
+	}
+	if profile.ProfileImage == nil {
+		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  fiber.StatusNotFound,
+			"message": "Profile picture not found",
+			"data":    nil,
+		})
+		return
+	}
+	fileQ := database.Connect.Where("id = ?", profile.ProfileImage.ID).Delete(&models.ProfileImage{})
+
+	if fileQ.Error != nil {
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  fiber.StatusInternalServerError,
+			"message": "Failed to delete profile picture",
+			"data":    nil,
+		})
+		return
+	}
+
+	if fileQ.RowsAffected == 0 {
+		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  fiber.StatusNotFound,
+			"message": "Profile picture not found",
+			"data":    nil,
+		})
+		return
+	}
+
+	store := models.Store{
+		EndPoint:   "localhost:9000",
+		AccessId:   "minioadmin",
+		AccessPass: "minioadmin",
+		UseSSL:     false,
+	}
+
+	store.Delete(os.Getenv("MINIO_BUCKET"), profile.ProfileImage.Path)
+
+	c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":  fiber.StatusOK,
+		"message": "Profile picture deleted successfully",
+		"data":    nil,
+	})
+
+}
+func DeleteCoverPic(c *fiber.Ctx) {
+
+	// fileid := c.Query("file_id")
+	// if fileid == "" {
+	// 	c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+	// 		"status":  fiber.StatusBadRequest,
+	// 		"message": "file_id is required",
+	// 		"data":    nil,
+	// 	})
+	// 	return
+	// }
+	profile, errC := GetUserFromToken(c.Get("Authorization"))
+
+	if errC != nil {
+		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"status":  fiber.ErrUnauthorized.Code,
+			"message": "Unauthorized",
+			"data":    nil,
+		})
+		return
+	}
+	if profile.CoverImage == nil {
+		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  fiber.StatusNotFound,
+			"message": "Cover picture not found",
+			"data":    nil,
+		})
+		return
+	}
+	fileQ := database.Connect.Where("id = ?", profile.CoverImage.ID).Delete(&models.CoverImage{})
+
+	if fileQ.Error != nil {
+		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  fiber.StatusInternalServerError,
+			"message": "Failed to delete cover picture",
+			"data":    nil,
+		})
+		return
+	}
+
+	if fileQ.RowsAffected == 0 {
+		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  fiber.StatusNotFound,
+			"message": "Cover picture not found",
+			"data":    nil,
+		})
+		return
+	}
+	store := models.Store{
+		EndPoint:   "localhost:9000",
+		AccessId:   "minioadmin",
+		AccessPass: "minioadmin",
+		UseSSL:     false,
+	}
+
+	store.Delete(os.Getenv("MINIO_BUCKET"), profile.CoverImage.Path)
+
+	c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":  fiber.StatusOK,
+		"message": "Cover picture deleted successfully",
+		"data":    nil,
+	})
+
+}

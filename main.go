@@ -34,6 +34,8 @@ func main() {
 	route.Get("/get/cover/image", controllers.GetCoverPic)
 	route.Get("/get/profile/image/by/id", controllers.GetPublicProfilePicById)
 	route.Get("/get/cover/image/by/id", controllers.GetPublicCoverPicById)
+	route.Delete("/delete/profile/image", controllers.DeleteProfilePic)
+	route.Delete("/delete/cover/image", controllers.DeleteCoverPic)
 	route.Patch("/update/profile", controllers.UpdateProfileDetails)
 	route.Post("/login", controllers.Login)
 	route.Get("/profile", controllers.GetProfile)

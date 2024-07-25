@@ -48,6 +48,39 @@
 							"response": []
 						},
 						{
+							"name": "Delete Profile Image",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{TOKEN}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"password\": \"1221\",\n  \"email_id\": \"sandipbera35@outlook.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/delete/profile/image",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"delete",
+										"profile",
+										"image"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Add/Update CoverImage",
 							"request": {
 								"method": "PATCH",
@@ -75,6 +108,39 @@
 									],
 									"path": [
 										"upload",
+										"cover",
+										"image"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Cover Image",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{TOKEN}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"password\": \"1221\",\n  \"email_id\": \"sandipbera35@outlook.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseurl}}/delete/cover/image",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"delete",
 										"cover",
 										"image"
 									]
@@ -371,7 +437,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"Sandip\",\n  \"last_name\": \"Bera\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1997-02-26T00:00:00Z\",\n  \"profile_pic_status\": true ,// this will update whether profile pic will be publicly available or not \n  \"cover_pic_status\":false\n}",
+							"raw": "{\n  \"first_name\": \"Mr\",\n  \"last_name\": \"Beast\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1997-02-26T00:00:00Z\",\n  \"profile_pic_status\": true ,// this will update whether profile pic will be publicly available or not \n  \"cover_pic_status\":true\n}",
 							"options": {
 								"raw": {
 									"language": "json"

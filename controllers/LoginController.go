@@ -64,7 +64,7 @@ func Login(c *fiber.Ctx) {
 		"expires_at":        ExpiresAt,
 		"issued_at":         IssuedAt,
 		"access_token":      token,
-		"refresh_token_ex":  rExpiresAt,
+		"refresh_token_exp": rExpiresAt,
 		"refresh_token_iss": rIssuedAt,
 		"refresh_token":     refresh_token,
 	})
