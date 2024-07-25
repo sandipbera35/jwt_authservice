@@ -8,30 +8,42 @@ import (
 
 // User represents the user model in the database
 type User struct {
-	ID           uuid.UUID `gorm:"type:uuid;primary_key;" json:"id"`
-	FirstName    string    `json:"first_name"`
-	LastName     string    `json:"last_name"`
-	Gender       string    `json:"gender"`
-	BirthDate    time.Time `json:"birth_date"`
-	UserName     string    `gorm:"unique" json:"user_name"`
-	UserPassword string    `gorm:"type:varchar(255)" json:"-"`
-	MobileNo     string    `json:"mobile_no"`
-	EmailID      string    `gorm:"unique" json:"email_id"`
-	Files        []File    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:UserID" ` // One-to-many relationship with Files
+	ID           uuid.UUID     `gorm:"type:uuid;primary_key;" json:"id"`
+	FirstName    string        `gorm:"type:varchar(255)" json:"first_name"`
+	LastName     string        `gorm:"type:varchar(255)" json:"last_name"`
+	Gender       string        `gorm:"type:varchar(255)" json:"gender"`
+	BirthDate    time.Time     `json:"birth_date"`
+	UserName     string        `gorm:"unique" json:"user_name"`
+	UserPassword string        `gorm:"type:varchar(255)" json:"-"`
+	MobileNo     string        `json:"mobile_no"`
+	EmailID      string        `gorm:"unique" json:"email_id"`
+	ProfileImage *ProfileImage `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:UserID" json:"profile_image"` // One-to-many relationship with Files
+	CoverImage   *CoverImage   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:UserID" json:"cover_image"`   // One-to-many relationship with Files
 }
 
 // File represents the file entity with additional information
-type File struct {
+type ProfileImage struct {
 	ID        uuid.UUID `gorm:"type:uuid;primaryKey;not null" json:"id"`
-	Type      string    `gorm:"type:varchar(100)" validate:"oneof='profile' 'cover' 'document' "`
-	FileName  string    `gorm:"type:text"`
-	UserID    uuid.UUID `gorm:"type:uuid;index"`   // Foreign key to the User table
-	Size      int64     `gorm:"not null"`          // File size in bytes
-	MimeType  string    `gorm:"size:100"`          // MIME type of the file
-	CreatedAt time.Time `gorm:"autoCreateTime"`    // Creation timestamp
-	UpdatedAt time.Time `gorm:"autoUpdateTime"`    // Update timestamp
-	Path      string    `gorm:"size:500;not null"` // File path or location
-	IsPublic  bool      `gorm:"default:true"`      // Public or private flag
+	FileName  string    `gorm:"type:text" json:"file_name"`
+	UserID    uuid.UUID `gorm:"type:uuid;index" json:"user_id"`   // Foreign key to the User table
+	Size      int64     `gorm:"not null" json:"size"`             // File size in bytes
+	MimeType  string    `gorm:"size:100" json:"mime_type"`        // MIME type of the file
+	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"` // Creation timestamp
+	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"` // Update timestamp
+	Path      string    `gorm:"size:500;not null" json:"path"`    // File path or location
+	IsPublic  bool      `gorm:"default:true" json:"is_public"`    // Public or private flag
+}
+
+type CoverImage struct {
+	ID        uuid.UUID `gorm:"type:uuid;primaryKey;not null" json:"id"`
+	FileName  string    `gorm:"type:text" json:"file_name"`
+	UserID    uuid.UUID `gorm:"type:uuid;index" json:"user_id"`   // Foreign key to the User table
+	Size      int64     `gorm:"not null" json:"size"`             // File size in bytes
+	MimeType  string    `gorm:"size:100" json:"mime_type"`        // MIME type of the file
+	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"` // Creation timestamp
+	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"` // Update timestamp
+	Path      string    `gorm:"size:500;not null" json:"path"`    // File path or location
+	IsPublic  bool      `gorm:"default:true" json:"is_public"`    // Public or private flag
 }
 
 type UserUiModel struct {
@@ -44,4 +56,5 @@ type UserUiModel struct {
 	MobileNo         string    `json:"mobile_no"`
 	EmailID          string    `json:"email_id"`
 	ProfilePicStatus bool      `json:"profile_pic_status"` // this will update whether profile pic will be publicly available or not
+	CoverPicStatus   bool      `json:"cover_pic_status"`   // this will update whether cover pic will be publicly available or notPicStatus bool      `json:"profile_pic_status"` // this will update whether profile pic will be publicly available or not
 }

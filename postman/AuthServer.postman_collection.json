@@ -13,7 +13,7 @@
 					"name": "Image Controller",
 					"item": [
 						{
-							"name": "Upload Profile Picture",
+							"name": "Add/Update Profile Picture",
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -29,7 +29,7 @@
 										{
 											"key": "profile_pic",
 											"type": "file",
-											"src": "/Users/sandipbera/Downloads/ChildHoood.jpg"
+											"src": "/private/var/folders/6n/85gf6m6j46z0v34tc23507m80000gn/T/com.apple.Photos.NSItemProvider/uuid=38D77FC6-66FD-4854-9638-2056A908C4E9&library=1&type=1&mode=1&loc=true&cap=true.jpeg/IMG_20240508_171433238_BURST001_COMP.jpeg"
 										}
 									]
 								},
@@ -41,6 +41,41 @@
 									"path": [
 										"upload",
 										"profile",
+										"image"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add/Update CoverImage",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{TOKEN}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "cover_pic",
+											"type": "file",
+											"src": "/private/var/folders/6n/85gf6m6j46z0v34tc23507m80000gn/T/com.apple.Photos.NSItemProvider/uuid=CBEEC29C-FD14-4B0C-8039-663E24246106&library=1&type=1&mode=1&loc=true&cap=true.jpeg/IMG_20240323_174914688_HDR.jpeg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseurl}}/upload/cover/image",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"upload",
+										"cover",
 										"image"
 									]
 								}
@@ -80,6 +115,38 @@
 							"response": []
 						},
 						{
+							"name": "Get Cover Image",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{TOKEN}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{baseurl}}/get/cover/image?token={{TOKEN}}",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"get",
+										"cover",
+										"image"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Get Profile Pic By Id (Public)",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
@@ -105,7 +172,7 @@
 									]
 								},
 								"url": {
-									"raw": "{{baseurl}}/get/profile/image/by/id?file_id=0fa38c8f-f061-4cd7-9fc3-3c3f936afa4e",
+									"raw": "{{baseurl}}/get/profile/image/by/id?file_id=68a38d97-7b23-4b0d-b4df-adffec2732c6",
 									"host": [
 										"{{baseurl}}"
 									],
@@ -124,7 +191,59 @@
 										},
 										{
 											"key": "file_id",
-											"value": "0fa38c8f-f061-4cd7-9fc3-3c3f936afa4e"
+											"value": "68a38d97-7b23-4b0d-b4df-adffec2732c6"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Cover Pic By Id (Public)",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{TOKEN}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "profile_pic",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseurl}}/get/cover/image/by/id?file_id=7e93796b-98a4-4e3b-bdac-6be4a99c93db",
+									"host": [
+										"{{baseurl}}"
+									],
+									"path": [
+										"get",
+										"cover",
+										"image",
+										"by",
+										"id"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDA4ZjliMWUtMjViNS00OGU5LTgyYjMtYzI2ZGQ5MzM3MTRmIiwiZmlyc3RfbmFtZSI6IlNhbmRpcCIsImxhc3RfbmFtZSI6IkJlcmEiLCJnZW5kZXIiOiJNYWxlIiwiYmlydGhfZGF0ZSI6IjE5OTMtMDItMjYgMDU6MzA6MDAgKzA1MzAgSVNUIiwidXNlcl9uYW1lIjoic2FuZGlwYmVyYTEyIiwibW9iaWxlX25vIjoiODE1ODgwMjM5MiIsImVtYWlsX2lkIjoic2FuZGlwYmVyYTM1QG91dGxvb2suY29tIiwiZXhwIjoxNzIxNzQ4MjQzLCJpYXQiOjE3MjE3NDQ2NDN9.meLm-BdSyvjTLDngi6fzGNNsfhh6wQf50lQFUg1G2Pk",
+											"disabled": true
+										},
+										{
+											"key": "file_id",
+											"value": "7e93796b-98a4-4e3b-bdac-6be4a99c93db"
 										}
 									]
 								}
@@ -173,7 +292,7 @@
 							"script": {
 								"exec": [
 									"const response = pm.response.json();",
-									"pm.collectionVariables.set('TOKEN', response.token);",
+									"pm.collectionVariables.set('TOKEN', response.access_token);",
 									""
 								],
 								"type": "text/javascript",
@@ -186,7 +305,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"password\": \"1221\",\n  \"email_id\": \"sandipbera35@outlook.com\"\n}",
+							"raw": "{\n  \"password\": \"12131213\",\n  \"email_id\": \"beast@outlook.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -252,7 +371,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"Sandip\",\n  \"last_name\": \"Bera\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1997-02-26T00:00:00Z\",\n  \"profile_pic_status\": true // this will update whether profile pic will be publicly available or not \n}",
+							"raw": "{\n  \"first_name\": \"Sandip\",\n  \"last_name\": \"Bera\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1997-02-26T00:00:00Z\",\n  \"profile_pic_status\": true ,// this will update whether profile pic will be publicly available or not \n  \"cover_pic_status\":false\n}",
 							"options": {
 								"raw": {
 									"language": "json"

@@ -7,21 +7,22 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/sandipbera35/jwt_authservice/database"
 	"github.com/sandipbera35/jwt_authservice/models"
+	"gorm.io/gorm/clause"
 )
 
 var jwtSecret = []byte(os.Getenv("JWTSECRET"))
 
 type CustomClaims struct {
-	UserId       string       `json:"user_id"`
-	FirstName    string       `json:"first_name"`
-	LastName     string       `json:"last_name"`
-	Gender       string       `json:"gender"`
-	BirthDate    string       `json:"birth_date"`
-	UserName     string       `json:"user_name"`
-	MobileNo     string       `json:"mobile_no"`
-	EmailID      string       `json:"email_id"`
-	ProfileImage *models.File `json:"profile_image"`
-	DisplayIamge *models.File `json:"display_image"`
+	UserId    string `json:"user_id"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Gender    string `json:"gender"`
+	// BirthDate    string               `json:"birth_date"`
+	UserName string `json:"user_name"`
+	// MobileNo     string               `json:"mobile_no"`
+	// EmailID      string               `json:"email_id"`
+	ProfileImage *models.ProfileImage `json:"profile_image"`
+	CoverImage   *models.CoverImage   `json:"cover_image"`
 	jwt.RegisteredClaims
 }
 
@@ -31,10 +32,10 @@ func GenerateJWT(userDetails models.User, ExpiresAt *jwt.NumericDate, IssuedAt *
 		FirstName: userDetails.FirstName,
 		LastName:  userDetails.LastName,
 		Gender:    userDetails.Gender,
-		BirthDate: userDetails.BirthDate.String(),
-		UserName:  userDetails.UserName,
-		MobileNo:  userDetails.MobileNo,
-		EmailID:   userDetails.EmailID,
+		// BirthDate: userDetails.BirthDate.String(),
+		UserName: userDetails.UserName,
+		// MobileNo:  userDetails.MobileNo,
+		// EmailID:   userDetails.EmailID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: ExpiresAt,
 			IssuedAt:  IssuedAt,
@@ -69,7 +70,7 @@ func GetUserFromToken(token string) (models.User, error) {
 		return models.User{}, err
 	}
 	var user models.User
-	if err := database.Connect.Where("id = ?", claims.UserId).First(&user).Error; err != nil {
+	if err := database.Connect.Where("id = ?", claims.UserId).Preload(clause.Associations).First(&user).Error; err != nil {
 		return models.User{}, err
 	}
 	return user, nil

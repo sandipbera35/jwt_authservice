@@ -56,16 +56,17 @@ func ConnectDatabase() error {
 	}
 
 	if os.Getenv("MIGRATION") == "true" {
-		AutoMigrateFunc(models.User{}, models.File{})
+		AutoMigrateFunc(models.User{}, models.ProfileImage{}, models.CoverImage{})
 	}
 	log.Println("Database connection was successful!!")
 	return nil
 
 }
 
-func AutoMigrateFunc(User models.User, File models.File) {
+func AutoMigrateFunc(User models.User, Profile models.ProfileImage, CoverImage models.CoverImage) {
 	Connect.Exec("ALTER DATABASE " + os.Getenv("NAME") + " SET timezone = 'UTC'")
 	Connect.AutoMigrate(&User)
-	Connect.AutoMigrate(&File)
+	Connect.AutoMigrate(&Profile)
+	Connect.AutoMigrate(&CoverImage)
 	log.Println("DataBase migration was successfull ")
 }
