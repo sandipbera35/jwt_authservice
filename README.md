@@ -22,4 +22,28 @@ visit https://www.postman.com/downloads/
 Import The Postman Collection File From postman folder of the project 
 
 
+**# Register New user**
+![image](https://github.com/user-attachments/assets/5c24d474-faf6-479c-830f-48ee2fc1d701)
+
+**# User PassWords saved in database as encripted form**
+
+![image](https://github.com/user-attachments/assets/ebfc796c-e456-4f6d-8249-ea5938d2019c)
+
+**# LogIn Or Get Token**
+
+![image](https://github.com/user-attachments/assets/a53501c1-a5c8-479c-8ee1-debff888eecf)
+
+
+**# Get Profile With JWT Token **
+
+![image](https://github.com/user-attachments/assets/64fe8846-bb3f-48d2-9e59-fb397e4dd275)
+
+**# Add OR Update profile picture**
+
+![image](https://github.com/user-attachments/assets/215840b1-0573-498f-b90f-8a0d601c417d)
+
+
+
+
+
 
