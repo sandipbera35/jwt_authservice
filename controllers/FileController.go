@@ -111,6 +111,7 @@ func AddUploadProfilePic(c *fiber.Ctx) {
 	file.UpdatedAt = time.Now().UTC()
 	file.FileName = fh.Filename
 	file.Size = fh.Size
+	file.Extension = filepath.Ext(fh.Filename)
 	file.MimeType = mimeType
 	file.UserID = profile.ID
 	file.Path = storepath
@@ -256,6 +257,7 @@ func AddUploadCoverPic(c *fiber.Ctx) {
 	file.UpdatedAt = time.Now().UTC()
 	file.FileName = fh.Filename
 	file.Size = fh.Size
+	file.Extension = filepath.Ext(fh.Filename)
 	file.MimeType = mimeType
 	file.UserID = profile.ID
 	file.Path = storepath

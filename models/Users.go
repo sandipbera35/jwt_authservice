@@ -28,6 +28,7 @@ type ProfileImage struct {
 	UserID    uuid.UUID `gorm:"type:uuid;index" json:"user_id"`   // Foreign key to the User table
 	Size      int64     `gorm:"not null" json:"size"`             // File size in bytes
 	MimeType  string    `gorm:"size:100" json:"mime_type"`        // MIME type of the file
+	Extension string    `gorm:"size:100" json:"extension"`        // File extension
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"` // Creation timestamp
 	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"` // Update timestamp
 	Path      string    `gorm:"size:500;not null" json:"path"`    // File path or location
@@ -41,6 +42,7 @@ type CoverImage struct {
 	UserID    uuid.UUID `gorm:"type:uuid;index" json:"user_id"`   // Foreign key to the User table
 	Size      int64     `gorm:"not null" json:"size"`             // File size in bytes
 	MimeType  string    `gorm:"size:100" json:"mime_type"`        // MIME type of the file
+	Extension string    `gorm:"size:100" json:"extension"`        // File extension
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"` // Creation timestamp
 	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"` // Update timestamp
 	Path      string    `gorm:"size:500;not null" json:"path"`    // File path or location
