@@ -21,7 +21,7 @@ type User struct {
 	CoverImage   *CoverImage   `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;foreignKey:UserID" json:"cover_image"`   // One-to-many relationship with Files
 }
 
-// File represents the file entity with additional information
+// ProfileImage represents the profile image model in the database
 type ProfileImage struct {
 	ID        uuid.UUID `gorm:"type:uuid;primaryKey;not null" json:"id"`
 	FileName  string    `gorm:"type:text" json:"file_name"`
@@ -34,6 +34,7 @@ type ProfileImage struct {
 	IsPublic  bool      `gorm:"default:true" json:"is_public"`    // Public or private flag
 }
 
+// CoverImage represents the cover image model in the database
 type CoverImage struct {
 	ID        uuid.UUID `gorm:"type:uuid;primaryKey;not null" json:"id"`
 	FileName  string    `gorm:"type:text" json:"file_name"`
