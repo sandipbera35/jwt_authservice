@@ -28,7 +28,7 @@ Import The Postman Collection File From postman folder of the project
 # Register New user
 ![image](https://github.com/user-attachments/assets/5c24d474-faf6-479c-830f-48ee2fc1d701)
 
-# User PassWords saved in database as encripted form**
+# User PassWords saved in database as encripted form
 
 ![image](https://github.com/user-attachments/assets/ebfc796c-e456-4f6d-8249-ea5938d2019c)
 
