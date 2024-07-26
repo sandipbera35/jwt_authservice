@@ -45,6 +45,11 @@ Import The Postman Collection File From postman folder of the project
 
 ![image](https://github.com/user-attachments/assets/215840b1-0573-498f-b90f-8a0d601c417d)
 
+# Add OR Update Cover Picture
+
+![image](https://github.com/user-attachments/assets/51d97b0b-8108-40fe-8496-0558d502c7ab)
+
+
 
 
 
