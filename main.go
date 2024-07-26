@@ -26,6 +26,10 @@ func main() {
 		})
 	})
 
+	adminroute := app.Group("/admin")
+	adminroute.Post("/register", controllers.AddAdmin)
+	adminroute.Get("/getadmins", controllers.GetAdmins)
+
 	route := app.Group("/api/v1")
 	route.Post("/register", controllers.Register)
 	route.Patch("/upload/profile/image", controllers.AddUploadProfilePic)

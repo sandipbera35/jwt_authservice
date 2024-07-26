@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "UserControll",
+			"name": "UserController",
 			"item": [
 				{
 					"name": "Image Controller",
@@ -331,7 +331,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"Mr\",\n  \"last_name\": \"Beast\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1999-02-26T00:00:00Z\",\n  \"user_name\": \"mrbeast1\",\n  \"user_password\": \"1213123\",\n  \"mobile_no\": \"8158802392\",\n  \"email_id\": \"beast@outlook.com\"\n}",
+							"raw": "{\n  \"first_name\": \"Sandip\",\n  \"last_name\": \"Bera\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1999-02-26T00:00:00Z\",\n  \"user_name\": \"sandipbera35\",\n  \"user_password\": \"MYPASS\",\n  \"mobile_no\": \"8918533450\",\n  \"email_id\": \"sandipbera35@outlook.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -345,46 +345,6 @@
 							],
 							"path": [
 								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "LogIn(GetToken)",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const response = pm.response.json();",
-									"pm.collectionVariables.set('TOKEN', response.access_token);",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"password\": \"12131213\",\n  \"email_id\": \"beast@outlook.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/login",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"login"
 							]
 						}
 					},
@@ -458,6 +418,113 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "ADDADMINROLE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{ADMINKEY}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "066d7f7a-041d-443c-b147-c7e6d825de0d",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "",
+									"description": "SUPERUSER | ADMIN | EDITOR",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{adminurl}}/register",
+							"host": [
+								"{{adminurl}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GETADMINS",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{ADMINKEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{adminurl}}/getadmins",
+							"host": [
+								"{{adminurl}}"
+							],
+							"path": [
+								"getadmins"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LogIn(GetToken)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"pm.collectionVariables.set('TOKEN', response.access_token);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"password\": \"MYPASS\",\n  \"email_id\": \"sandipbera3111@outlook.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseurl}}/login",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -491,6 +558,16 @@
 		{
 			"key": "baseurl",
 			"value": "localhost:8091/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "ADMINKEY",
+			"value": "8poLls9Rn5YqztYvfuiIiC9ZE0J7qnlG",
+			"type": "string"
+		},
+		{
+			"key": "adminurl",
+			"value": "localhost:8091/admin",
 			"type": "string"
 		}
 	]
