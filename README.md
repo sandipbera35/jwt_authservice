@@ -32,7 +32,7 @@ Import The Postman Collection File From postman folder of the project
 
 ![image](https://github.com/user-attachments/assets/ebfc796c-e456-4f6d-8249-ea5938d2019c)
 
-# LogIn Or Get Token**
+# LogIn Or Get Token
 
 ![image](https://github.com/user-attachments/assets/a53501c1-a5c8-479c-8ee1-debff888eecf)
 
