@@ -1,9 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"strings"
 
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/sandipbera35/jwt_authservice/database"
 	"github.com/sandipbera35/jwt_authservice/models"
@@ -13,14 +14,14 @@ import (
 // var jwtSecret = []byte("supersecretkey")
 
 // Register endpoint
-func Register(c *fiber.Ctx) {
+func Register(c *fiber.Ctx) error {
 	userUiModel := new(models.UserUiModel)
 
 	if err := c.BodyParser(userUiModel); err != nil {
 		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse JSON",
 		})
-		return
+		return err
 	}
 
 	user := new(models.User)
@@ -41,7 +42,7 @@ func Register(c *fiber.Ctx) {
 			"status":  fiber.StatusBadRequest,
 			"message": "User already exists with this email or mobile number",
 		})
-		return
+		return fmt.Errorf("User already exists with this email or mobile number")
 	}
 	//check password is vlid or not
 	if len(userUiModel.UserPassword) < 6 || strings.TrimSpace(userUiModel.UserPassword) == "" {
@@ -49,7 +50,7 @@ func Register(c *fiber.Ctx) {
 			"status":  fiber.StatusBadRequest,
 			"message": "Password must be at least 6 characters",
 		})
-		return
+		return fmt.Errorf("Password must be at least 6 characters")
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userUiModel.UserPassword), bcrypt.DefaultCost)
@@ -57,7 +58,7 @@ func Register(c *fiber.Ctx) {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to hash password",
 		})
-		return
+		return fmt.Errorf("Failed to hash password")
 	}
 	user.UserPassword = string(hashedPassword)
 
@@ -65,7 +66,7 @@ func Register(c *fiber.Ctx) {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Could not register user",
 		})
-		return
+		return fmt.Errorf("Could not register user")
 	}
 
 	// c.Status(fiber.StatusOK)
@@ -74,4 +75,5 @@ func Register(c *fiber.Ctx) {
 		"message": "User registered successfully",
 		"data":    user,
 	})
+	return nil
 }

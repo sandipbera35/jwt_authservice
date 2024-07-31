@@ -9,13 +9,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/sandipbera35/jwt_authservice/database"
 	"github.com/sandipbera35/jwt_authservice/models"
 )
 
-func AddUploadProfilePic(c *fiber.Ctx) {
+func AddUploadProfilePic(c *fiber.Ctx) error {
 	profile, ErrC := GetUserFromToken(c.Get("Authorization"))
 
 	if ErrC != nil {
@@ -24,7 +24,7 @@ func AddUploadProfilePic(c *fiber.Ctx) {
 			"message": "Unauthorized",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 	fh, e := c.FormFile("profile_pic")
 
@@ -34,7 +34,7 @@ func AddUploadProfilePic(c *fiber.Ctx) {
 			"message": "Invalid Image Format",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	f, errF := fh.Open()
@@ -44,7 +44,7 @@ func AddUploadProfilePic(c *fiber.Ctx) {
 			"message": "Failed to upload profile picture",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	filePath := os.Getenv("STORE_PATH") + fh.Filename
@@ -52,7 +52,7 @@ func AddUploadProfilePic(c *fiber.Ctx) {
 	_, _ = io.Copy(fc, f)
 	if errfc != nil {
 		c.JSON("could not save file data")
-		return
+		return nil
 	}
 
 	defer func() {
@@ -67,7 +67,7 @@ func AddUploadProfilePic(c *fiber.Ctx) {
 			"message": "File size must be greater than 200 bytes",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	mimeType := fh.Header.Get("Content-Type")
@@ -77,7 +77,7 @@ func AddUploadProfilePic(c *fiber.Ctx) {
 			"message": "File must be an image",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	var fileQ models.ProfileImage
@@ -127,7 +127,7 @@ func AddUploadProfilePic(c *fiber.Ctx) {
 			"message": "Failed to upload profile picture",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 	if fQ.RowsAffected > 0 {
 		if err := database.Connect.Where("user_id = ?", profile.ID).Updates(&file).Error; err != nil {
@@ -136,7 +136,7 @@ func AddUploadProfilePic(c *fiber.Ctx) {
 				"message": "Failed to upload profile picture",
 				"data":    nil,
 			})
-			return
+			return nil
 		}
 	} else {
 		if err := database.Connect.Create(&file).Error; err != nil {
@@ -145,7 +145,7 @@ func AddUploadProfilePic(c *fiber.Ctx) {
 				"message": "Failed to upload profile picture",
 				"data":    nil,
 			})
-			return
+			return nil
 		}
 
 	}
@@ -159,8 +159,9 @@ func AddUploadProfilePic(c *fiber.Ctx) {
 		"message": "Profile picture uploaded successfully",
 		"data":    file,
 	})
+	return nil
 }
-func AddUploadCoverPic(c *fiber.Ctx) {
+func AddUploadCoverPic(c *fiber.Ctx) error {
 	profile, ErrC := GetUserFromToken(c.Get("Authorization"))
 
 	if ErrC != nil {
@@ -169,7 +170,7 @@ func AddUploadCoverPic(c *fiber.Ctx) {
 			"message": "Unauthorized",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 	fh, e := c.FormFile("cover_pic")
 
@@ -180,7 +181,7 @@ func AddUploadCoverPic(c *fiber.Ctx) {
 			"message": "Failed to upload cover picture",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	f, errF := fh.Open()
@@ -190,7 +191,7 @@ func AddUploadCoverPic(c *fiber.Ctx) {
 			"message": "Failed to upload cover picture",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	filePath := os.Getenv("STORE_PATH") + fh.Filename
@@ -198,7 +199,7 @@ func AddUploadCoverPic(c *fiber.Ctx) {
 	_, _ = io.Copy(fc, f)
 	if errfc != nil {
 		c.JSON("could not save file data")
-		return
+		return nil
 	}
 
 	defer func() {
@@ -213,7 +214,7 @@ func AddUploadCoverPic(c *fiber.Ctx) {
 			"message": "File size must be greater than 200 bytes",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	mimeType := fh.Header.Get("Content-Type")
@@ -223,7 +224,7 @@ func AddUploadCoverPic(c *fiber.Ctx) {
 			"message": "File must be an image",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	var fileQ models.CoverImage
@@ -273,7 +274,7 @@ func AddUploadCoverPic(c *fiber.Ctx) {
 			"message": "Failed to upload profile picture",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 	if fQ.RowsAffected > 0 {
 		if err := database.Connect.Where("user_id = ?", profile.ID).Updates(&file).Error; err != nil {
@@ -282,7 +283,7 @@ func AddUploadCoverPic(c *fiber.Ctx) {
 				"message": "Failed to upload profile picture",
 				"data":    nil,
 			})
-			return
+			return nil
 		}
 	} else {
 		if err := database.Connect.Create(&file).Error; err != nil {
@@ -291,7 +292,7 @@ func AddUploadCoverPic(c *fiber.Ctx) {
 				"message": "Failed to upload profile picture",
 				"data":    nil,
 			})
-			return
+			return nil
 		}
 
 	}
@@ -305,9 +306,10 @@ func AddUploadCoverPic(c *fiber.Ctx) {
 		"message": "Profile picture uploaded successfully",
 		"data":    file,
 	})
+	return nil
 }
 
-func GetProfilePic(c *fiber.Ctx) {
+func GetProfilePic(c *fiber.Ctx) error {
 
 	token := c.Get("Authorization")
 
@@ -319,7 +321,7 @@ func GetProfilePic(c *fiber.Ctx) {
 				"message": "Unauthorized",
 				"data":    nil,
 			})
-			return
+			return nil
 		}
 	}
 
@@ -330,7 +332,7 @@ func GetProfilePic(c *fiber.Ctx) {
 			"message": "Unauthorized",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	if profile.ProfileImage == nil {
@@ -342,7 +344,7 @@ func GetProfilePic(c *fiber.Ctx) {
 		c.Set("Content-Length", fmt.Sprintf("%v", len(f)))
 
 		c.Status(fiber.StatusOK).SendFile("./defaultprofile.png", true)
-		return
+		return nil
 
 	}
 
@@ -356,7 +358,7 @@ func GetProfilePic(c *fiber.Ctx) {
 			"message": "Profile picture not found",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	store := models.Store{
@@ -375,7 +377,7 @@ func GetProfilePic(c *fiber.Ctx) {
 			"message": "Failed to get profile picture",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	// stream file with fiber
@@ -383,7 +385,7 @@ func GetProfilePic(c *fiber.Ctx) {
 	if err != nil {
 		log.Println("Error getting object info:", err)
 		c.Status(fiber.StatusInternalServerError).JSON("Error getting object info")
-		return
+		return nil
 	}
 
 	// Set headers for the response
@@ -393,9 +395,10 @@ func GetProfilePic(c *fiber.Ctx) {
 
 	// Stream the object to the client
 	c.SendStream(obj, int(file.Size))
+	return nil
 
 }
-func GetCoverPic(c *fiber.Ctx) {
+func GetCoverPic(c *fiber.Ctx) error {
 
 	token := c.Get("Authorization")
 
@@ -407,7 +410,7 @@ func GetCoverPic(c *fiber.Ctx) {
 				"message": "Unauthorized",
 				"data":    nil,
 			})
-			return
+			return nil
 		}
 	}
 
@@ -418,7 +421,7 @@ func GetCoverPic(c *fiber.Ctx) {
 			"message": "Unauthorized",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	if profile.CoverImage == nil {
@@ -430,7 +433,7 @@ func GetCoverPic(c *fiber.Ctx) {
 		c.Set("Content-Length", fmt.Sprintf("%v", len(f)))
 
 		c.Status(fiber.StatusOK).SendFile("./default_cover.jpg", true)
-		return
+		return nil
 
 	}
 
@@ -444,7 +447,7 @@ func GetCoverPic(c *fiber.Ctx) {
 			"message": "Cover picture not found",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	store := models.Store{
@@ -463,7 +466,7 @@ func GetCoverPic(c *fiber.Ctx) {
 			"message": "Failed to get cover picture",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	// stream file with fiber
@@ -471,7 +474,7 @@ func GetCoverPic(c *fiber.Ctx) {
 	if err != nil {
 		log.Println("Error getting object info:", err)
 		c.Status(fiber.StatusInternalServerError).JSON("Error getting object info")
-		return
+		return nil
 	}
 
 	// Set headers for the response
@@ -481,10 +484,11 @@ func GetCoverPic(c *fiber.Ctx) {
 
 	// Stream the object to the client
 	c.SendStream(obj, int(file.Size))
+	return nil
 
 }
 
-func GetPublicProfilePicById(c *fiber.Ctx) {
+func GetPublicProfilePicById(c *fiber.Ctx) error {
 
 	fileid := c.Query("file_id")
 
@@ -494,7 +498,7 @@ func GetPublicProfilePicById(c *fiber.Ctx) {
 			"message": "file_id is required",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	var file models.ProfileImage
@@ -507,7 +511,7 @@ func GetPublicProfilePicById(c *fiber.Ctx) {
 			"message": "Profile picture not found",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	store := models.Store{
@@ -526,7 +530,7 @@ func GetPublicProfilePicById(c *fiber.Ctx) {
 			"message": "Failed to get profile picture",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	// stream file with fiber
@@ -534,7 +538,7 @@ func GetPublicProfilePicById(c *fiber.Ctx) {
 	if err != nil {
 		log.Println("Error getting object info:", err)
 		c.Status(fiber.StatusInternalServerError).JSON("Error getting object info")
-		return
+		return nil
 	}
 
 	// Set headers for the response
@@ -544,9 +548,10 @@ func GetPublicProfilePicById(c *fiber.Ctx) {
 
 	// Stream the object to the client
 	c.SendStream(obj, int(file.Size))
+	return nil
 
 }
-func GetPublicCoverPicById(c *fiber.Ctx) {
+func GetPublicCoverPicById(c *fiber.Ctx) error {
 
 	fileid := c.Query("file_id")
 
@@ -556,7 +561,7 @@ func GetPublicCoverPicById(c *fiber.Ctx) {
 			"message": "file_id is required",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	var file models.CoverImage
@@ -569,7 +574,7 @@ func GetPublicCoverPicById(c *fiber.Ctx) {
 			"message": "Cover picture not found",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	store := models.Store{
@@ -588,7 +593,7 @@ func GetPublicCoverPicById(c *fiber.Ctx) {
 			"message": "Failed to get cover picture",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	// stream file with fiber
@@ -596,7 +601,7 @@ func GetPublicCoverPicById(c *fiber.Ctx) {
 	if err != nil {
 		log.Println("Error getting object info:", err)
 		c.Status(fiber.StatusInternalServerError).JSON("Error getting object info")
-		return
+		return nil
 	}
 
 	// Set headers for the response
@@ -606,10 +611,11 @@ func GetPublicCoverPicById(c *fiber.Ctx) {
 
 	// Stream the object to the client
 	c.SendStream(obj, int(file.Size))
+	return nil
 
 }
 
-func DeleteProfilePic(c *fiber.Ctx) {
+func DeleteProfilePic(c *fiber.Ctx) error {
 
 	// fileid := c.Query("file_id")
 	// if fileid == "" {
@@ -628,7 +634,7 @@ func DeleteProfilePic(c *fiber.Ctx) {
 			"message": "Unauthorized",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 	if profile.ProfileImage == nil {
 		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -636,7 +642,7 @@ func DeleteProfilePic(c *fiber.Ctx) {
 			"message": "Profile picture not found",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 	fileQ := database.Connect.Where("id = ?", profile.ProfileImage.ID).Delete(&models.ProfileImage{})
 
@@ -646,7 +652,7 @@ func DeleteProfilePic(c *fiber.Ctx) {
 			"message": "Failed to delete profile picture",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	if fileQ.RowsAffected == 0 {
@@ -655,7 +661,7 @@ func DeleteProfilePic(c *fiber.Ctx) {
 			"message": "Profile picture not found",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	store := models.Store{
@@ -672,9 +678,10 @@ func DeleteProfilePic(c *fiber.Ctx) {
 		"message": "Profile picture deleted successfully",
 		"data":    nil,
 	})
+	return nil
 
 }
-func DeleteCoverPic(c *fiber.Ctx) {
+func DeleteCoverPic(c *fiber.Ctx) error {
 
 	// fileid := c.Query("file_id")
 	// if fileid == "" {
@@ -693,7 +700,7 @@ func DeleteCoverPic(c *fiber.Ctx) {
 			"message": "Unauthorized",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 	if profile.CoverImage == nil {
 		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -701,7 +708,7 @@ func DeleteCoverPic(c *fiber.Ctx) {
 			"message": "Cover picture not found",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 	fileQ := database.Connect.Where("id = ?", profile.CoverImage.ID).Delete(&models.CoverImage{})
 
@@ -711,7 +718,7 @@ func DeleteCoverPic(c *fiber.Ctx) {
 			"message": "Failed to delete cover picture",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	if fileQ.RowsAffected == 0 {
@@ -720,7 +727,7 @@ func DeleteCoverPic(c *fiber.Ctx) {
 			"message": "Cover picture not found",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 	store := models.Store{
 		EndPoint:   "localhost:9000",
@@ -736,5 +743,6 @@ func DeleteCoverPic(c *fiber.Ctx) {
 		"message": "Cover picture deleted successfully",
 		"data":    nil,
 	})
+	return nil
 
 }

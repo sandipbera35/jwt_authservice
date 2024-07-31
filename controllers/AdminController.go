@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/sandipbera35/jwt_authservice/database"
 	"github.com/sandipbera35/jwt_authservice/models"
@@ -14,14 +14,14 @@ import (
 
 var Roles []string = []string{"SUPERUSER", "ADMIN", "EDITOR"}
 
-func AddAdmin(c *fiber.Ctx) {
+func AddAdmin(c *fiber.Ctx) error {
 
 	key := os.Getenv("ADMINKEY")
 
 	if key != strings.TrimSpace(c.Get("Authorization")) {
 		c.Status(fiber.StatusUnauthorized)
 		c.JSON("Unauthorized")
-		return
+		return nil
 	}
 
 	userID := c.FormValue("user_id")
@@ -30,12 +30,12 @@ func AddAdmin(c *fiber.Ctx) {
 	if role == "" {
 		c.Status(fiber.StatusBadRequest)
 		c.JSON("Role is required")
-		return
+		return nil
 	}
 	if !IsValidRole(role) {
 		c.Status(fiber.StatusBadRequest)
 		c.JSON("Invalid role")
-		return
+		return nil
 	}
 
 	var findsuper models.Admin
@@ -45,7 +45,7 @@ func AddAdmin(c *fiber.Ctx) {
 	if superQ.RowsAffected > 0 {
 		c.Status(fiber.StatusBadRequest)
 		c.JSON("Superuser already exists more than one superuser is not allowed")
-		return
+		return nil
 	}
 	user := models.User{}
 	userQ := database.Connect.Where("id = ?", userID).First(&user)
@@ -53,7 +53,7 @@ func AddAdmin(c *fiber.Ctx) {
 	if userQ.Error != nil {
 		c.Status(fiber.StatusNotFound)
 		c.JSON("User not found")
-		return
+		return nil
 	}
 	var admin models.Admin
 	adminQ := database.Connect.Where("user_id = ?", user.ID).Find(&admin)
@@ -62,7 +62,7 @@ func AddAdmin(c *fiber.Ctx) {
 		c.Status(fiber.StatusBadRequest)
 		msg := fmt.Sprintf("%v already exists", admin.Role)
 		c.JSON(msg)
-		return
+		return nil
 	}
 
 	admin.ID = uuid.New()
@@ -73,26 +73,27 @@ func AddAdmin(c *fiber.Ctx) {
 	if createAdminQ.Error != nil {
 		c.Status(fiber.StatusInternalServerError)
 		c.JSON("Internal Server error")
-		return
+		return nil
 	}
 	if createAdminQ.RowsAffected == 0 {
 		c.Status(fiber.StatusInternalServerError)
 		c.JSON("Something went wrong")
-		return
+		return nil
 	}
 
 	c.Status(fiber.StatusOK)
 	msg := fmt.Sprintf("%v added successfully", role)
 	c.JSON(msg)
+	return nil
 }
 
-func GetAdmins(c *fiber.Ctx) {
+func GetAdmins(c *fiber.Ctx) error {
 	key := os.Getenv("ADMINKEY")
 
 	if key != strings.TrimSpace(c.Get("Authorization")) {
 		c.Status(fiber.StatusUnauthorized)
 		c.JSON("Unauthorized")
-		return
+		return nil
 	}
 	admins := []models.Admin{}
 	database.Connect.Preload("User", func(db *gorm.DB) *gorm.DB {
@@ -101,6 +102,7 @@ func GetAdmins(c *fiber.Ctx) {
 	}).Find(&admins)
 	c.Status(fiber.StatusOK)
 	c.JSON(admins)
+	return nil
 }
 
 func IsValidRole(role string) bool {

@@ -1,10 +1,9 @@
 package controllers
 
 import (
-	"fmt"
 	"time"
 
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"gorm.io/gorm/clause"
 
@@ -13,7 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Login(c *fiber.Ctx) {
+func Login(c *fiber.Ctx) error {
 	data := new(struct {
 		EmailID  string `json:"email_id"`
 		Password string `json:"password"`
@@ -23,7 +22,7 @@ func Login(c *fiber.Ctx) {
 		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse JSON",
 		})
-		return
+		return nil
 	}
 
 	var user models.User
@@ -31,14 +30,14 @@ func Login(c *fiber.Ctx) {
 		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid credentials",
 		})
-		return
+		return nil
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.UserPassword), []byte(data.Password)); err != nil {
 		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid credentials",
 		})
-		return
+		return nil
 	}
 	ExpiresAt := jwt.NewNumericDate(time.Now().Add(time.Hour * 1))
 	IssuedAt := jwt.NewNumericDate(time.Now())
@@ -49,14 +48,14 @@ func Login(c *fiber.Ctx) {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Could not login",
 		})
-		return
+		return nil
 	}
 	refresh_token, err := GenerateJWT(user, rExpiresAt, rIssuedAt)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Could not login",
 		})
-		return
+		return nil
 	}
 
 	c.JSON(fiber.Map{
@@ -68,16 +67,17 @@ func Login(c *fiber.Ctx) {
 		"refresh_token_iss": rIssuedAt,
 		"refresh_token":     refresh_token,
 	})
+	return nil
 }
 
-func GetProfile(c *fiber.Ctx) {
+func GetProfile(c *fiber.Ctx) error {
 	token := c.Get("Authorization")
 	claims, err := VerifyJWT(token)
 	if err != nil {
 		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Unauthorized",
 		})
-		return
+		return nil
 	}
 
 	var user models.User
@@ -87,15 +87,16 @@ func GetProfile(c *fiber.Ctx) {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Could not get profile",
 		})
-		return
+		return nil
 	}
 	// claims.ProfileImage = user.ProfileImage
 	// claims.CoverImage = user.CoverImage
 
 	c.Status(fiber.StatusOK).JSON(user)
+	return nil
 }
 
-func UpdateProfileDetails(c *fiber.Ctx) {
+func UpdateProfileDetails(c *fiber.Ctx) error {
 
 	token := c.Get("Authorization")
 	// fmt.Printf("token: %v\n", token)
@@ -104,7 +105,7 @@ func UpdateProfileDetails(c *fiber.Ctx) {
 		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Unauthorized",
 		})
-		return
+		return nil
 	}
 	var profile models.User
 	// fmt.Printf("profile: %v\n", claims)
@@ -116,7 +117,7 @@ func UpdateProfileDetails(c *fiber.Ctx) {
 			"message": "Profile not found",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	var usermodel models.UserUiModel
@@ -124,10 +125,10 @@ func UpdateProfileDetails(c *fiber.Ctx) {
 		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Cannot parse JSON",
 		})
-		return
+		return nil
 	}
 
-	fmt.Printf("usermodel: %v\n", usermodel)
+	// fmt.Printf("usermodel: %v\n", usermodel)
 
 	profile.FirstName = usermodel.FirstName
 	profile.LastName = usermodel.LastName
@@ -142,7 +143,7 @@ func UpdateProfileDetails(c *fiber.Ctx) {
 			"message": "Failed to update profile details",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	var profile_image models.ProfileImage
@@ -153,7 +154,7 @@ func UpdateProfileDetails(c *fiber.Ctx) {
 			"message": "Profile picture not found",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 	var cover_image models.CoverImage
 	CoverImageQ := database.Connect.Where("user_id = ?", claims.UserId).First(&cover_image)
@@ -163,7 +164,7 @@ func UpdateProfileDetails(c *fiber.Ctx) {
 			"message": "Profile picture not found",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	// file.IsPublic = ispub
@@ -175,7 +176,7 @@ func UpdateProfileDetails(c *fiber.Ctx) {
 			"message": "Failed to update profile details",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 	coverSaveQ := database.Connect.Model(models.CoverImage{}).Where("id = ?", cover_image.ID).UpdateColumn("is_public", usermodel.CoverPicStatus)
 
@@ -185,7 +186,7 @@ func UpdateProfileDetails(c *fiber.Ctx) {
 			"message": "Failed to update profile details",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	GetProfileQ := database.Connect.Where("id = ?", claims.UserId).Preload(clause.Associations).Find(&profile)
@@ -195,8 +196,10 @@ func UpdateProfileDetails(c *fiber.Ctx) {
 			"message": "Internal server errors",
 			"data":    nil,
 		})
-		return
+		return nil
 	}
 
 	c.Status(fiber.StatusOK).JSON(profile)
+
+	return nil
 }
