@@ -49,6 +49,11 @@ Import The Postman Collection File From postman folder of the project
 
 ![image](https://github.com/user-attachments/assets/51d97b0b-8108-40fe-8496-0558d502c7ab)
 
+# ADD SUPER USER
+
+![image](https://github.com/user-attachments/assets/75a2edaa-7566-4af2-919e-afa7434517c8)
+
+
 
 
 
