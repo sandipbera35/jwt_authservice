@@ -84,10 +84,16 @@ func AddUploadProfilePic(c *fiber.Ctx) error {
 
 	fQ := database.Connect.Where("user_id = ?", profile.ID).Find(&fileQ)
 
+	minioEndpoint := os.Getenv("MINIO_ENDPOINT")
+	minioAccessID := os.Getenv("MINIO_ACCESSID")
+	minioAccessPass := os.Getenv("MINIO_ACCESSPASS")
+	// minioUseSSL := os.Getenv("MINIO_USESSL")
+	minioBucket := os.Getenv("MINIO_BUCKET")
+
 	store := models.Store{
-		EndPoint:   "localhost:9000",
-		AccessId:   "minioadmin",
-		AccessPass: "minioadmin",
+		EndPoint:   minioEndpoint,
+		AccessId:   minioAccessID,
+		AccessPass: minioAccessPass,
 		UseSSL:     false,
 	}
 	storepath := ""
@@ -117,11 +123,11 @@ func AddUploadProfilePic(c *fiber.Ctx) error {
 	file.Path = storepath
 
 	file.IsPublic = fileQ.IsPublic
-
-	errMFU := store.Upload(os.Getenv("MINIO_BUCKET"), storepath, filePath, mimeType)
+	fmt.Printf("minioBucket: %v\n", minioBucket)
+	errMFU := store.Upload(minioBucket, storepath, filePath, mimeType)
 
 	if errMFU {
-		fmt.Println("Error in File server")
+		fmt.Println("Error in File server : ", errMFU)
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": "Failed to upload profile picture",
@@ -264,6 +270,7 @@ func AddUploadCoverPic(c *fiber.Ctx) error {
 	file.Path = storepath
 
 	file.IsPublic = fileQ.IsPublic
+	fmt.Printf("os.Getenv(\"MINIO_BUCKET\"): %v\n", os.Getenv("MINIO_BUCKET"))
 
 	errMFU := store.Upload(os.Getenv("MINIO_BUCKET"), storepath, filePath, mimeType)
 
