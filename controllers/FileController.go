@@ -357,7 +357,7 @@ func GetProfilePic(c *fiber.Ctx) error {
 
 	var file models.ProfileImage
 
-	fileQ := database.Connect.Where("user_id = ?", profile.ID).First(&file)
+	fileQ := database.Connect.Where("user_id = ?", profile.ID).Find(&file)
 
 	if fileQ.RowsAffected == 0 {
 		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -446,7 +446,7 @@ func GetCoverPic(c *fiber.Ctx) error {
 
 	var file models.CoverImage
 
-	fileQ := database.Connect.Where("user_id = ?", profile.ID).First(&file)
+	fileQ := database.Connect.Where("user_id = ?", profile.ID).Find(&file)
 
 	if fileQ.RowsAffected == 0 {
 		c.Status(fiber.StatusNotFound).JSON(fiber.Map{

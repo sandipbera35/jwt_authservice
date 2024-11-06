@@ -331,7 +331,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"Sandip\",\n  \"last_name\": \"Bera\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1999-02-26T00:00:00Z\",\n  \"user_name\": \"sandipbera35\",\n  \"user_password\": \"MYPASS\",\n  \"mobile_no\": \"8918533450\",\n  \"email_id\": \"sandipbera35@outlook.com\"\n}",
+							"raw": "{\n  \"Find_name\": \"Sandip\",\n  \"last_name\": \"Bera\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1999-02-26T00:00:00Z\",\n  \"user_name\": \"sandipbera35\",\n  \"user_password\": \"MYPASS\",\n  \"mobile_no\": \"8918533450\",\n  \"email_id\": \"sandipbera35@outlook.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -397,7 +397,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"Mr\",\n  \"last_name\": \"Beast\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1997-02-26T00:00:00Z\",\n  \"profile_pic_status\": true ,// this will update whether profile pic will be publicly available or not \n  \"cover_pic_status\":true\n}",
+							"raw": "{\n  \"Find_name\": \"Mr\",\n  \"last_name\": \"Beast\",\n  \"gender\": \"Male\",\n  \"birth_date\": \"1997-02-26T00:00:00Z\",\n  \"profile_pic_status\": true ,// this will update whether profile pic will be publicly available or not \n  \"cover_pic_status\":true\n}",
 							"options": {
 								"raw": {
 									"language": "json"

@@ -26,7 +26,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	var user models.User
-	if err := database.Connect.Where("email_id = ?", data.EmailID).First(&user).Error; err != nil {
+	if err := database.Connect.Where("email_id = ?", data.EmailID).Find(&user).Error; err != nil {
 		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid credentials",
 		})
@@ -81,7 +81,7 @@ func GetProfile(c *fiber.Ctx) error {
 	}
 
 	var user models.User
-	dbQ := database.Connect.Where("id = ?", claims.UserId).Preload(clause.Associations).First(&user)
+	dbQ := database.Connect.Where("id = ?", claims.UserId).Preload(clause.Associations).Find(&user)
 
 	if dbQ.Error != nil {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -109,7 +109,7 @@ func UpdateProfileDetails(c *fiber.Ctx) error {
 	}
 	var profile models.User
 	// fmt.Printf("profile: %v\n", claims)
-	findQ := database.Connect.Where("id = ?", claims.UserId).First(&profile)
+	findQ := database.Connect.Where("id = ?", claims.UserId).Find(&profile)
 
 	if findQ.Error != nil {
 		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -130,7 +130,7 @@ func UpdateProfileDetails(c *fiber.Ctx) error {
 
 	// fmt.Printf("usermodel: %v\n", usermodel)
 
-	profile.FirstName = usermodel.FirstName
+	profile.FindName = usermodel.FindName
 	profile.LastName = usermodel.LastName
 	profile.Gender = usermodel.Gender
 	profile.BirthDate = usermodel.BirthDate
@@ -147,7 +147,7 @@ func UpdateProfileDetails(c *fiber.Ctx) error {
 	}
 
 	var profile_image models.ProfileImage
-	ProfileImageQ := database.Connect.Where("user_id = ?", claims.UserId).First(&profile_image)
+	ProfileImageQ := database.Connect.Where("user_id = ?", claims.UserId).Find(&profile_image)
 	if ProfileImageQ.RowsAffected == 0 {
 		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  fiber.StatusNotFound,
@@ -157,7 +157,7 @@ func UpdateProfileDetails(c *fiber.Ctx) error {
 		return nil
 	}
 	var cover_image models.CoverImage
-	CoverImageQ := database.Connect.Where("user_id = ?", claims.UserId).First(&cover_image)
+	CoverImageQ := database.Connect.Where("user_id = ?", claims.UserId).Find(&cover_image)
 	if CoverImageQ.RowsAffected == 0 {
 		c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  fiber.StatusNotFound,

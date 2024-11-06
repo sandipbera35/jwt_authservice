@@ -13,10 +13,10 @@ import (
 var jwtSecret = []byte(os.Getenv("JWTSECRET"))
 
 type CustomClaims struct {
-	UserId    string `json:"user_id"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Gender    string `json:"gender"`
+	UserId   string `json:"user_id"`
+	FindName string `json:"Find_name"`
+	LastName string `json:"last_name"`
+	Gender   string `json:"gender"`
 	// BirthDate    string               `json:"birth_date"`
 	UserName string `json:"user_name"`
 	// MobileNo     string               `json:"mobile_no"`
@@ -28,10 +28,10 @@ type CustomClaims struct {
 
 func GenerateJWT(userDetails models.User, ExpiresAt *jwt.NumericDate, IssuedAt *jwt.NumericDate) (string, error) {
 	claims := CustomClaims{
-		UserId:    userDetails.ID.String(),
-		FirstName: userDetails.FirstName,
-		LastName:  userDetails.LastName,
-		Gender:    userDetails.Gender,
+		UserId:   userDetails.ID.String(),
+		FindName: userDetails.FindName,
+		LastName: userDetails.LastName,
+		Gender:   userDetails.Gender,
 		// BirthDate: userDetails.BirthDate.String(),
 		UserName: userDetails.UserName,
 		// MobileNo:  userDetails.MobileNo,
@@ -70,7 +70,7 @@ func GetUserFromToken(token string) (models.User, error) {
 		return models.User{}, err
 	}
 	var user models.User
-	if err := database.Connect.Where("id = ?", claims.UserId).Preload(clause.Associations).First(&user).Error; err != nil {
+	if err := database.Connect.Where("id = ?", claims.UserId).Preload(clause.Associations).Find(&user).Error; err != nil {
 		return models.User{}, err
 	}
 	return user, nil

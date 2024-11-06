@@ -25,7 +25,7 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	user := new(models.User)
-	user.FirstName = userUiModel.FirstName
+	user.FindName = userUiModel.FindName
 	user.LastName = userUiModel.LastName
 	user.Gender = userUiModel.Gender
 	user.BirthDate = userUiModel.BirthDate

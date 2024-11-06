@@ -40,7 +40,7 @@ func AddAdmin(c *fiber.Ctx) error {
 
 	var findsuper models.Admin
 
-	superQ := database.Connect.Model(&models.Admin{}).Where("role = ?", "SUPERUSER").First(&findsuper)
+	superQ := database.Connect.Model(&models.Admin{}).Where("role = ?", "SUPERUSER").Find(&findsuper)
 
 	if superQ.RowsAffected > 0 {
 		c.Status(fiber.StatusBadRequest)
@@ -48,7 +48,7 @@ func AddAdmin(c *fiber.Ctx) error {
 		return nil
 	}
 	user := models.User{}
-	userQ := database.Connect.Where("id = ?", userID).First(&user)
+	userQ := database.Connect.Where("id = ?", userID).Find(&user)
 
 	if userQ.Error != nil {
 		c.Status(fiber.StatusNotFound)
