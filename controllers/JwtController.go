@@ -29,7 +29,7 @@ type CustomClaims struct {
 func GenerateJWT(userDetails models.User, ExpiresAt *jwt.NumericDate, IssuedAt *jwt.NumericDate) (string, error) {
 	claims := CustomClaims{
 		UserId:   userDetails.ID.String(),
-		FindName: userDetails.FindName,
+		FindName: userDetails.FirstName,
 		LastName: userDetails.LastName,
 		Gender:   userDetails.Gender,
 		// BirthDate: userDetails.BirthDate.String(),

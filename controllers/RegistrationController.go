@@ -25,7 +25,7 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	user := new(models.User)
-	user.FindName = userUiModel.FindName
+	user.FirstName = userUiModel.FirstName
 	user.LastName = userUiModel.LastName
 	user.Gender = userUiModel.Gender
 	user.BirthDate = userUiModel.BirthDate
@@ -42,15 +42,16 @@ func Register(c *fiber.Ctx) error {
 			"status":  fiber.StatusBadRequest,
 			"message": "User already exists with this email or mobile number",
 		})
-		return fmt.Errorf("User already exists with this email or mobile number")
+		return fmt.Errorf("user already exists with this email or mobile number")
 	}
+	fmt.Println("Password : ", strings.TrimSpace(userUiModel.UserPassword))
 	//check password is vlid or not
 	if len(userUiModel.UserPassword) < 6 || strings.TrimSpace(userUiModel.UserPassword) == "" {
 		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  fiber.StatusBadRequest,
 			"message": "Password must be at least 6 characters",
 		})
-		return fmt.Errorf("Password must be at least 6 characters")
+		return fmt.Errorf("password must be at least 6 characters")
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userUiModel.UserPassword), bcrypt.DefaultCost)
@@ -58,7 +59,7 @@ func Register(c *fiber.Ctx) error {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Failed to hash password",
 		})
-		return fmt.Errorf("Failed to hash password")
+		return fmt.Errorf("failed to hash password")
 	}
 	user.UserPassword = string(hashedPassword)
 
@@ -66,7 +67,7 @@ func Register(c *fiber.Ctx) error {
 		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "Could not register user",
 		})
-		return fmt.Errorf("Could not register user")
+		return fmt.Errorf("could not register user")
 	}
 
 	// c.Status(fiber.StatusOK)

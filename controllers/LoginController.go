@@ -130,7 +130,7 @@ func UpdateProfileDetails(c *fiber.Ctx) error {
 
 	// fmt.Printf("usermodel: %v\n", usermodel)
 
-	profile.FindName = usermodel.FindName
+	profile.FirstName = usermodel.FirstName
 	profile.LastName = usermodel.LastName
 	profile.Gender = usermodel.Gender
 	profile.BirthDate = usermodel.BirthDate

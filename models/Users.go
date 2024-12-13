@@ -9,7 +9,7 @@ import (
 // User represents the user model in the database
 type User struct {
 	ID           uuid.UUID     `gorm:"type:uuid;primary_key;" json:"id"`
-	FindName     string        `gorm:"type:varchar(255)" json:"Find_name"`
+	FirstName    string        `gorm:"type:varchar(255)" json:"first_name"`
 	LastName     string        `gorm:"type:varchar(255)" json:"last_name"`
 	Gender       string        `gorm:"type:varchar(255)" json:"gender"`
 	BirthDate    time.Time     `json:"birth_date"`
@@ -50,7 +50,7 @@ type CoverImage struct {
 }
 
 type UserUiModel struct {
-	FindName         string    `json:"Find_name"`
+	FirstName        string    `json:"First_name"`
 	LastName         string    `json:"last_name"`
 	Gender           string    `json:"gender"`
 	BirthDate        time.Time `json:"birth_date"`
