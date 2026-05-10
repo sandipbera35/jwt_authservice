@@ -11,6 +11,7 @@ import (
 
 func init() {
 	database.ConnectDatabase()
+	// database.CreateAdmin()
 }
 func main() {
 	println("Server strated .....!")
@@ -49,6 +50,14 @@ func main() {
 	route.Post("/login", controllers.Login)
 	route.Get("/profile", controllers.GetProfile)
 
-	app.Listen(":8091")
+	app.Get("/health", func(c *fiber.Ctx) error {
+		c.Status(fiber.StatusOK)
+		c.JSON(map[string]interface{}{
+			"message": "Server is healthy",
+		})
+		return nil
+	})
+
+	app.Listen(":8080")
 
 }
