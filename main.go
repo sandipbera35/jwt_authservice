@@ -11,7 +11,7 @@ import (
 
 func init() {
 	database.ConnectDatabase()
-	// database.CreateAdmin()
+	database.CreateAdmin("SUPERUSER")
 }
 func main() {
 	println("Server strated .....!")

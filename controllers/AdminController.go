@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/sandipbera35/jwt_authservice/database"
 	"github.com/sandipbera35/jwt_authservice/models"
+	"github.com/sandipbera35/jwt_authservice/service"
 	"gorm.io/gorm"
 )
 
@@ -16,15 +17,34 @@ var Roles []string = []string{"SUPERUSER", "ADMIN", "EDITOR"}
 
 func AddAdmin(c *fiber.Ctx) error {
 
-	key := os.Getenv("ADMINKEY")
-
-	if key != strings.TrimSpace(c.Get("Authorization")) {
+	profile, ErrC := GetUserFromToken(c.Get("Authorization"))
+	if ErrC != nil {
 		c.Status(fiber.StatusUnauthorized)
 		c.JSON("Unauthorized")
 		return nil
 	}
 
-	userID := c.FormValue("user_id")
+	userID := profile.ID
+
+	var service service.AdminService
+	loggedInRole, IsFound, ErrS := service.GetRoleByUserId(userID.String())
+	if ErrS != nil {
+		c.Status(fiber.StatusInternalServerError)
+		c.JSON("Internal Server error")
+		return nil
+	}
+	if !IsFound {
+		c.Status(fiber.StatusForbidden)
+		c.JSON("Forbidden")
+		return nil
+	}
+
+	if loggedInRole != "SUPERUSER" {
+		c.Status(fiber.StatusForbidden)
+		c.JSON("Forbidden")
+		return nil
+	}
+
 	role := c.FormValue("role")
 
 	if role == "" {

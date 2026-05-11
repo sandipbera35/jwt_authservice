@@ -6,9 +6,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func CreateAdmin() {
+func CreateAdmin(role string) {
 
-	findQ := Connect.Where("email_id = ?", "admin@admin.admin").Find(map[string]interface{}{})
+	findQ := Connect.Model(models.User{}).Where("email_id = ?", "admin@admin.admin").Find(map[string]any{})
 	if findQ.RowsAffected == 0 {
 		var user models.User
 		var admin models.Admin
@@ -21,6 +21,12 @@ func CreateAdmin() {
 			panic("user not created")
 		}
 		user.UserPassword = string(hashedPassword)
+		user.EmailID = "admin@admin.admin"
+		// user.IsAdmin = true
+		user.FirstName = "Admin"
+		user.LastName = "Admin"
+		user.Gender = "Male"
+
 		createAdmin := Connect.Create(&user)
 
 		if createAdmin.Error != nil {
@@ -31,7 +37,7 @@ func CreateAdmin() {
 		}
 
 		admin.UserID = user.ID
-		admin.Role = "ADMIN"
+		admin.Role = role
 		admin.ID = uuid.New()
 
 		Connect.Create(&admin)

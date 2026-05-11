@@ -29,12 +29,12 @@ func ConnectDatabase() error {
 
 	port, _ := strconv.Atoi(dbPort)
 
-	user := os.Getenv("USER")
+	// user := os.Getenv("USER")
 	dbName := os.Getenv("NAME")
 	password := os.Getenv("PASSWORD")
 
 	dburi := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d",
-		host, user, password, dbName, port)
+		host, "sandipbera35", password, dbName, port)
 	var err error
 	if strings.ToUpper(os.Getenv("DBLOGTYPE")) == "INFO" {
 		Connect, err = gorm.Open(postgres.Open(dburi), &gorm.Config{
@@ -46,6 +46,7 @@ func ConnectDatabase() error {
 		})
 
 	} else {
+		log.Default().Println("dburi : ", dburi)
 		Connect, err = gorm.Open(postgres.Open(dburi), &gorm.Config{
 			Logger: logger.Default.LogMode(logger.Error),
 		})
